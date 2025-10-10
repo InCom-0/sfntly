@@ -6,6 +6,14 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 project(sfntly)
 
+option(${PROJECT_NAME}_BUILD_EXECUTABLES
+    "Build executables in ${PROJECT_NAME}"
+    OFF)
+
+option(${PROJECT_NAME}_BUILD_LIBRARIES
+    "Build libraries in ${PROJECT_NAME}"
+    ON)
+
 set(GCC_OR_CLANG ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR CMAKE_COMPILER_IS_GNUCXX))
 
 # For gcc, make the default be debug build and valgrind friendly.
@@ -67,6 +75,8 @@ endif(MSVC10 OR MSVC90)
               ${SFNTLY_TABLE_BITMAP_FILES}
               ${SFNTLY_TABLE_CORE_FILES}
               ${SFNTLY_TABLE_TTF_FILES})
+
+if (${PROJECT_NAME}_BUILD_EXECUTABLES)
   file(GLOB_RECURSE SIMPLE_SUBSETTER src/sample/subsetter/*.h src/sample/subsetter/*.cc
                                      src/sfntly/tools/*.h src/sfntly/tools/*.cc)
   add_executable(subsetter ${SIMPLE_SUBSETTER})
@@ -123,3 +133,4 @@ endif(GCC_OR_CLANG)
  if(GCC_OR_CLANG)
    target_link_libraries(chrome_subsetter pthread)
  endif(GCC_OR_CLANG)
+endif()
