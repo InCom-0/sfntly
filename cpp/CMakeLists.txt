@@ -1,6 +1,6 @@
 ########################################################################
 # CMake build script for Google Typography sfntly.
-cmake_minimum_required(VERSION 2.6.2)
+cmake_minimum_required(VERSION 2.6.2...4.0)
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "good configs" FORCE)
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
