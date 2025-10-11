@@ -13,7 +13,8 @@ option(${PROJECT_NAME}_BUILD_EXECUTABLES
     "Build executables in ${PROJECT_NAME}"
     OFF)
 
-set(GCC_OR_CLANG ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR CMAKE_COMPILER_IS_GNUCXX))
+set(GCC_OR_CLANG $<IF:$<NOT:$<BOOL:${MSVC}>>,TRUE,FALSE>)
+# set(GCC_OR_CLANG ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR CMAKE_COMPILER_IS_GNUCXX))
 
 include(CMake_dependencies.cmake) ### Loads and declares the required external libraries using CMake's FetchContent.
 
