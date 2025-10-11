@@ -75,7 +75,7 @@ target_sources(sfntly
     BASE_DIRS
     src/)
 target_link_libraries(sfntly icu::uc)
-
+target_compile_features(sfntly PUBLIC cxx_std_17)
 
 
 if(${PROJECT_NAME}_BUILD_EXECUTABLES)
