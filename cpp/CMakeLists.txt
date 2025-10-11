@@ -13,7 +13,9 @@ option(${PROJECT_NAME}_BUILD_EXECUTABLES
     "Build executables in ${PROJECT_NAME}"
     OFF)
 
-set(GCC_OR_CLANG $<IF:$<NOT:$<BOOL:${MSVC}>>,TRUE,FALSE>)
+if(NOT MSVC)
+    set(GCC_OR_CLANG TRUE)
+endif()
 # set(GCC_OR_CLANG ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR CMAKE_COMPILER_IS_GNUCXX))
 
 include(CMake_dependencies.cmake) ### Loads and declares the required external libraries using CMake's FetchContent.
@@ -68,10 +70,10 @@ add_library(sfntly
 
 target_sources(sfntly
     PUBLIC
-        FILE_SET pub_headers
-        TYPE HEADERS
-        BASE_DIRS
-                src/)
+    FILE_SET pub_headers
+    TYPE HEADERS
+    BASE_DIRS
+    src/)
 target_link_libraries(sfntly icu::uc)
 
 
