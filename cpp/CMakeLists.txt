@@ -47,13 +47,13 @@ endif(GCC_OR_CLANG)
   add_definitions(-DSFNTLY_EXPERIMENTAL)
 
 # VC specific flags
-if(MSVC10 OR MSVC90)
+if(MSVC)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi /nologo /W4 /WX /O2 /Ob2 /Oy /GF /Gm- /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /GR-")
   set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi /nologo /W4 /WX /Od /Oy- /RTC1 /MTd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /GR-")
   add_definitions(-D_UNICODE -DUNICODE)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ext/icu/include)
   link_directories(${CMAKE_CURRENT_SOURCE_DIR}/ext/icu/lib)
-endif(MSVC10 OR MSVC90)
+endif(MSVC)
 
   file(GLOB SFNTLY_CORE_FILES src/sfntly/*.h src/sfntly/*.cc)
   file(GLOB SFNTLY_PORT_FILES src/sfntly/port/*.h src/sfntly/port/*.cc)
