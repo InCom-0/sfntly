@@ -14,6 +14,11 @@ option(${PROJECT_NAME}_BUILD_LIBRARIES
     "Build libraries in ${PROJECT_NAME}"
     ON)
 
+option(${PROJECT_NAME}_BUILD_TESTS
+    "Build libraries in ${PROJECT_NAME}"
+    OFF)
+
+
 set(GCC_OR_CLANG ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR CMAKE_COMPILER_IS_GNUCXX))
 
 # For gcc, make the default be debug build and valgrind friendly.
@@ -93,6 +98,7 @@ endif(GCC_OR_CLANG)
     src/sample/chromium/subsetter_impl.cc
     src/sample/chromium/font_subsetter.cc
     src/sample/chromium/font_subsetter.h)
+if (${PROJECT_NAME}_BUILD_TESTS)
   add_executable(unit_test
     ${TEST_CASES} ${CHROME_SUBSETTER_LIB}
     ext/gtest/src/gtest-all.cc
@@ -101,6 +107,7 @@ endif(GCC_OR_CLANG)
 if(GCC_OR_CLANG)
   target_link_libraries(unit_test pthread)
 endif(GCC_OR_CLANG)
+endif()
   # subtly targets
   file(GLOB SUBTLY_FILES src/sample/subtly/*.h src/sample/subtly/*.cc)
   file(GLOB SUBTLY_MAINS src/sample/subtly/*main.cc)
