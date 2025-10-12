@@ -6,22 +6,15 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 project(sfntly)
 
-option(${PROJECT_NAME}_BUILD_LIBRARIES
-    "Build libraries in ${PROJECT_NAME}"
-    ON)
 option(${PROJECT_NAME}_BUILD_EXECUTABLES
     "Build executables in ${PROJECT_NAME}"
     OFF)
-
-if(NOT MSVC)
+    
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
     set(GCC_OR_CLANG TRUE)
 endif()
-# set(GCC_OR_CLANG ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR CMAKE_COMPILER_IS_GNUCXX))
 
 include(CMake_dependencies.cmake) ### Loads and declares the required external libraries using CMake's FetchContent.
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/sample ${CMAKE_CURRENT_SOURCE_DIR}/src/sample/subtly)
 
 # The following simulates Chrome compilation flags
 add_definitions(-DSFNTLY_NO_EXCEPTION)
@@ -79,10 +72,14 @@ target_compile_features(sfntly PUBLIC cxx_std_17)
 
 
 if(${PROJECT_NAME}_BUILD_EXECUTABLES)
+    # Would be better to do include dirs on 'per-target' basis here too ... but the executable are unlikely to be used by anyone anyway
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/sample ${CMAKE_CURRENT_SOURCE_DIR}/src/sample/subtly)
+
     file(GLOB_RECURSE SIMPLE_SUBSETTER src/sample/subsetter/*.h src/sample/subsetter/*.cc
         src/sfntly/tools/*.h src/sfntly/tools/*.cc)
     add_executable(subsetter ${SIMPLE_SUBSETTER})
-    target_link_libraries(subsetter sfntly icuuc)
+    target_link_libraries(subsetter sfntly icu::uc)
     if(GCC_OR_CLANG)
         target_link_libraries(subsetter pthread)
     endif(GCC_OR_CLANG)
@@ -103,19 +100,19 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLES)
         ${SUBTLY_FILES})
     add_executable(subtly_subsetter
         src/sample/subtly/subsetter_main.cc)
-    target_link_libraries(subtly_subsetter subtly sfntly icuuc)
+    target_link_libraries(subtly_subsetter subtly sfntly icu::uc)
     if(GCC_OR_CLANG)
         target_link_libraries(subtly_subsetter pthread)
     endif(GCC_OR_CLANG)
     add_executable(subtly_merger
         src/sample/subtly/merger_main.cc)
-    target_link_libraries(subtly_merger subtly sfntly icuuc)
+    target_link_libraries(subtly_merger subtly sfntly icu::uc)
     if(GCC_OR_CLANG)
         target_link_libraries(subtly_merger pthread)
     endif(GCC_OR_CLANG)
     add_executable(subtly_debug
         src/sample/subtly/debug_main.cc)
-    target_link_libraries(subtly_debug subtly sfntly icuuc)
+    target_link_libraries(subtly_debug subtly sfntly icu::uc)
     if(GCC_OR_CLANG)
         target_link_libraries(subtly_debug pthread)
     endif(GCC_OR_CLANG)
@@ -123,7 +120,7 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLES)
         ${CHROME_SUBSETTER_LIB}
         src/sample/chromium/chrome_subsetter.cc
     )
-    target_link_libraries(chrome_subsetter sfntly icuuc)
+    target_link_libraries(chrome_subsetter sfntly icu::uc)
     if(GCC_OR_CLANG)
         target_link_libraries(chrome_subsetter pthread)
     endif(GCC_OR_CLANG)
