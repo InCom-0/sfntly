@@ -39,14 +39,14 @@ static inline size_t AtomicDecrement(size_t* address) {
 
 #elif defined (__APPLE__)
 
-#include <atomic>
+#include <stddef.h>
 
 static inline size_t AtomicIncrement(size_t* address) {
-  return std::atomic_fetch_add(reinterpret_cast<int32_t*>(address));
+  return __sync_add_and_fetch(address, 1);
 }
 
 static inline size_t AtomicDecrement(size_t* address) {
-  return std::atomic_fetch_sub(reinterpret_cast<int32_t*>(address));
+  return __sync_sub_and_fetch(address, 1);
 }
 
 // Originally we check __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4, however, there are
