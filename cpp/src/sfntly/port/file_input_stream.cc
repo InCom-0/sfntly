@@ -19,6 +19,7 @@
 #endif
 
 #include <algorithm>
+#include <stdio.h>
 
 #include "sfntly/port/file_input_stream.h"
 #include "sfntly/port/exception_type.h"
