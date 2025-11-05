@@ -17,7 +17,6 @@ endif()
 if((NOT (CMAKE_SYSTEM_NAME MATCHES "Windows")) OR (MINGW))
     set(LINK_PTHREADS TRUE)
 else()
-    add_compile_options(/utf-8)
     add_compile_definitions(NOMINMAX)
 endif()
 
