@@ -19,30 +19,20 @@
 #endif
 
 #include <algorithm>
-#include <stdio.h>
 
-#include "sfntly/port/file_input_stream.h"
 #include "sfntly/port/exception_type.h"
+#include "sfntly/port/file_input_stream.h"
+
 
 namespace sfntly {
 
-FileInputStream::FileInputStream()
-    : file_(NULL),
-      position_(0),
-      length_(0) {
-}
+FileInputStream::FileInputStream() : file_(NULL), position_(0), length_(0) {}
 
-FileInputStream::~FileInputStream() {
-  Close();
-}
+FileInputStream::~FileInputStream() { Close(); }
 
-int32_t FileInputStream::Length() {
-  return length_;
-}
+int32_t FileInputStream::Length() { return length_; }
 
-int32_t FileInputStream::Available() {
-  return length_ - position_;
-}
+int32_t FileInputStream::Available() { return length_ - position_; }
 
 void FileInputStream::Close() {
   if (file_) {
@@ -58,19 +48,17 @@ void FileInputStream::Mark(int32_t readlimit) {
   UNREFERENCED_PARAMETER(readlimit);
 }
 
-bool FileInputStream::MarkSupported() {
-  return false;
-}
+bool FileInputStream::MarkSupported() { return false; }
 
 int32_t FileInputStream::Read() {
   if (!file_) {
-#if !defined (SFNTLY_NO_EXCEPTION)
+#if !defined(SFNTLY_NO_EXCEPTION)
     throw IOException("no opened file");
 #endif
     return 0;
   }
   if (feof(file_)) {
-#if !defined (SFNTLY_NO_EXCEPTION)
+#if !defined(SFNTLY_NO_EXCEPTION)
     throw IOException("eof reached");
 #endif
     return 0;
@@ -81,20 +69,21 @@ int32_t FileInputStream::Read() {
   return value;
 }
 
-int32_t FileInputStream::Read(std::vector<uint8_t>* b) {
+int32_t FileInputStream::Read(std::vector<uint8_t> *b) {
   return Read(b, 0, b->size());
 }
 
-int32_t FileInputStream::Read(std::vector<uint8_t>* b, int32_t offset, int32_t length) {
+int32_t FileInputStream::Read(std::vector<uint8_t> *b, int32_t offset,
+                              int32_t length) {
   assert(b);
   if (!file_) {
-#if !defined (SFNTLY_NO_EXCEPTION)
+#if !defined(SFNTLY_NO_EXCEPTION)
     throw IOException("no opened file");
 #endif
     return 0;
   }
   if (feof(file_)) {
-#if !defined (SFNTLY_NO_EXCEPTION)
+#if !defined(SFNTLY_NO_EXCEPTION)
     throw IOException("eof reached");
 #endif
     return 0;
@@ -114,13 +103,13 @@ void FileInputStream::Reset() {
 
 int64_t FileInputStream::Skip(int64_t n) {
   if (!file_) {
-#if !defined (SFNTLY_NO_EXCEPTION)
+#if !defined(SFNTLY_NO_EXCEPTION)
     throw IOException("no opened file");
 #endif
     return 0;
   }
   int64_t skip_count = 0;
-  if (n < 0) {  // move backwards
+  if (n < 0) { // move backwards
     skip_count = std::max<int64_t>(0 - (int64_t)position_, n);
     position_ -= (size_t)(0 - skip_count);
     fseek(file_, position_, SEEK_SET);
@@ -132,15 +121,16 @@ int64_t FileInputStream::Skip(int64_t n) {
   return skip_count;
 }
 
-void FileInputStream::Unread(std::vector<uint8_t>* b) {
+void FileInputStream::Unread(std::vector<uint8_t> *b) {
   Unread(b, 0, b->size());
 }
 
-void FileInputStream::Unread(std::vector<uint8_t>* b, int32_t offset, int32_t length) {
+void FileInputStream::Unread(std::vector<uint8_t> *b, int32_t offset,
+                             int32_t length) {
   assert(b);
   assert(b->size() >= size_t(offset + length));
   if (!file_) {
-#if !defined (SFNTLY_NO_EXCEPTION)
+#if !defined(SFNTLY_NO_EXCEPTION)
     throw IOException("no opened file");
 #endif
     return;
@@ -153,14 +143,16 @@ void FileInputStream::Unread(std::vector<uint8_t>* b, int32_t offset, int32_t le
   position_ -= unread_count;
 }
 
-bool FileInputStream::Open(const char* file_path) {
+bool FileInputStream::Open(const char *file_path) {
   assert(file_path);
   if (file_) {
     Close();
   }
-
+#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
   fopen_s(&file_, file_path, "rb");
-
+#else
+  file_ = fopen(file_path, "rb");
+#endif
   if (file_ == NULL) {
     return false;
   }
@@ -171,4 +163,4 @@ bool FileInputStream::Open(const char* file_path) {
   return true;
 }
 
-}  // namespace sfntly
+} // namespace sfntly
