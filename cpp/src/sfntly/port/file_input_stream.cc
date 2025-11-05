@@ -157,11 +157,9 @@ bool FileInputStream::Open(const char* file_path) {
   if (file_) {
     Close();
   }
-#if defined(WIN32)
+
   fopen_s(&file_, file_path, "rb");
-#else
-  file_ = fopen(file_path, "rb");
-#endif
+
   if (file_ == NULL) {
     return false;
   }
