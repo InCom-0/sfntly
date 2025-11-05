@@ -60,6 +60,8 @@ add_library(sfntly
     ${SFNTLY_TABLE_BITMAP_FILES}
     ${SFNTLY_TABLE_CORE_FILES}
     ${SFNTLY_TABLE_TTF_FILES})
+add_library(sfntly::sfntly ALIAS sfntly)
+
 
 target_sources(sfntly
     PUBLIC
