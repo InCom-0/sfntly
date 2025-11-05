@@ -17,7 +17,7 @@
 #ifndef SFNTLY_CPP_SRC_SFNTLY_PORT_ATOMIC_H_
 #define SFNTLY_CPP_SRC_SFNTLY_PORT_ATOMIC_H_
 
-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+#if defined(WIN32)
 
 #include <windows.h>
 

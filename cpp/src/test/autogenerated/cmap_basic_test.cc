@@ -60,7 +60,7 @@ void CMapBasicTests::SetUp() {
   font_factory.Attach(FontFactory::GetInstance());
   FontArray font_array;
   std::string font_name = "../../";
-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+#if defined(WIN32)
   font_name += "../";
 #endif
   font_name += std::string(GetParam());
@@ -105,7 +105,7 @@ TEST_P(CMapBasicTests, BasicTest) {
     for (TiXmlNodeVector::iterator jt = maps->begin();
          jt != maps->end(); ++jt) {
       int32_t character;
-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+#if defined(WIN32)
       sscanf_s(GetAttribute(*jt, "char")->Value(), "%x", &character);
 #else
       sscanf(GetAttribute(*jt, "char")->Value(), "%x", &character);

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+#if defined(WIN32)
 #include <windows.h>
 #endif
 

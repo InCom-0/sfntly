@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+#if defined(WIN32)
 #include <windows.h>
 #endif
 
@@ -157,7 +157,7 @@ bool FileInputStream::Open(const char* file_path) {
   if (file_) {
     Close();
   }
-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+#if defined(WIN32)
   fopen_s(&file_, file_path, "rb");
 #else
   file_ = fopen(file_path, "rb");
