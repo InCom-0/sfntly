@@ -18,7 +18,7 @@
 
 namespace sfntly {
 
-#if defined (WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
 
 Lock::Lock() {
   // The second parameter is the spin count, for short-held locks it avoid the

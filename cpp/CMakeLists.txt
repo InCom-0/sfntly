@@ -1,6 +1,6 @@
 ########################################################################
 # CMake build script for Google Typography sfntly.
-cmake_minimum_required(VERSION 2.6.2...4.0)
+cmake_minimum_required(VERSION 3.3...4.0)
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "good configs" FORCE)
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
@@ -9,18 +9,22 @@ project(sfntly)
 option(${PROJECT_NAME}_BUILD_EXECUTABLES
     "Build executables in ${PROJECT_NAME}"
     OFF)
-    
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
     set(GCC_OR_CLANG TRUE)
+endif()
+
+if((NOT (CMAKE_SYSTEM_NAME MATCHES "Windows")) OR (MINGW))
+    set(LINK_PTHREADS TRUE)
 endif()
 
 include(CMake_dependencies.cmake) ### Loads and declares the required external libraries using CMake's FetchContent.
 
 # The following simulates Chrome compilation flags
 add_definitions(-DSFNTLY_NO_EXCEPTION)
-if(GCC_OR_CLANG)
+if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT MATCHES "GNU")
     add_definitions(-D__wur=__attribute__\(\(warn_unused_result\)\) -Wall -Werror -fno-exceptions)
-endif(GCC_OR_CLANG)
+endif()
 
 # Use STL for TinyXML library
 add_definitions(-DTIXML_USE_STL)
@@ -82,9 +86,9 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLES)
         src/sfntly/tools/*.h src/sfntly/tools/*.cc)
     add_executable(subsetter ${SIMPLE_SUBSETTER})
     target_link_libraries(subsetter sfntly icu::uc)
-    if(GCC_OR_CLANG)
+    if(LINK_PTHREADS)
         target_link_libraries(subsetter pthread)
-    endif(GCC_OR_CLANG)
+    endif()
     file(GLOB TINYXML src/test/tinyxml/*.cpp)
     add_library(tinyxml
         ${TINYXML})
@@ -103,27 +107,27 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLES)
     add_executable(subtly_subsetter
         src/sample/subtly/subsetter_main.cc)
     target_link_libraries(subtly_subsetter subtly sfntly icu::uc)
-    if(GCC_OR_CLANG)
+    if(LINK_PTHREADS)
         target_link_libraries(subtly_subsetter pthread)
-    endif(GCC_OR_CLANG)
+    endif()
     add_executable(subtly_merger
         src/sample/subtly/merger_main.cc)
     target_link_libraries(subtly_merger subtly sfntly icu::uc)
-    if(GCC_OR_CLANG)
+    if(LINK_PTHREADS)
         target_link_libraries(subtly_merger pthread)
-    endif(GCC_OR_CLANG)
+    endif()
     add_executable(subtly_debug
         src/sample/subtly/debug_main.cc)
     target_link_libraries(subtly_debug subtly sfntly icu::uc)
-    if(GCC_OR_CLANG)
+    if(LINK_PTHREADS)
         target_link_libraries(subtly_debug pthread)
-    endif(GCC_OR_CLANG)
+    endif()
     add_executable(chrome_subsetter
         ${CHROME_SUBSETTER_LIB}
         src/sample/chromium/chrome_subsetter.cc
     )
     target_link_libraries(chrome_subsetter sfntly icu::uc)
-    if(GCC_OR_CLANG)
+    if(LINK_PTHREADS)
         target_link_libraries(chrome_subsetter pthread)
-    endif(GCC_OR_CLANG)
+    endif()
 endif()

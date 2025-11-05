@@ -687,7 +687,7 @@ UChar* NameTable::ConvertFromNameBytes(std::vector<uint8_t>* name_bytes,
   UErrorCode error_code = U_ZERO_ERROR;
   if (cs == NULL) {
     char buffer[11] = {0};
-#if defined (WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
     _itoa_s(platform_id, buffer, 16);
 #else
     snprintf(buffer, sizeof(buffer), "%x", platform_id);

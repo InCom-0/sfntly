@@ -25,7 +25,7 @@ namespace sfntly {
 
 bool TestFileInputStream() {
   FILE* file_handle = NULL;
-#if defined (WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
   fopen_s(&file_handle, SAMPLE_TTF_FILE, "rb");
 #else
   file_handle = fopen(SAMPLE_TTF_FILE, "rb");
@@ -86,7 +86,7 @@ bool TestFileInputStream() {
 
 bool TestFontInputStreamBasic() {
   FILE* file_handle = NULL;
-#if defined (WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
   fopen_s(&file_handle, SAMPLE_TTF_FILE, "rb");
 #else
   file_handle = fopen(SAMPLE_TTF_FILE, "rb");

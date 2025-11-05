@@ -20,19 +20,19 @@
 #ifndef SFNTLY_CPP_SRC_TEST_PLATFORM_THREAD_H_
 #define SFNTLY_CPP_SRC_TEST_PLATFORM_THREAD_H_
 
-#if defined (WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
 #include <windows.h>
 #else  // Assume pthread
 #include <errno.h>
 #include <pthread.h>
 #include <time.h>
-#endif // if defined (WIN32)
+#endif // if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
 
 #include "sfntly/port/type.h"
 
 namespace sfntly {
 
-#if defined (WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
 typedef HANDLE PlatformThreadHandle;
 const PlatformThreadHandle kNullThreadHandle = NULL;
 #else  // Assume pthread

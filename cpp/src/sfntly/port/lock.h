@@ -17,7 +17,7 @@
 #ifndef SFNTLY_CPP_SRC_SFNTLY_PORT_LOCK_H_
 #define SFNTLY_CPP_SRC_SFNTLY_PORT_LOCK_H_
 
-#if defined (WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
 #include <windows.h>
 #else  // Assume pthread.
 #include <pthread.h>
@@ -28,7 +28,7 @@
 
 namespace sfntly {
 
-#if defined (WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
   typedef CRITICAL_SECTION OSLockType;
 #else  // Assume pthread.
   typedef pthread_mutex_t OSLockType;

@@ -18,7 +18,7 @@
 
 namespace sfntly {
 
-#if defined (WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
 
 DWORD __stdcall ThreadFunc(void* params) {
   PlatformThread::Delegate* delegate =
